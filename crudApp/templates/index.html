@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    {% load django_bootstrap5 %}
+    {% bootstrap_css %}
+    {% bootstrap_javascript %}
+
+    {% load static %}
+    <title>CRUD con datatables - AJAX</title>
+    <link href="{% static 'DataTables-1.13.6/css/dataTables.bootstrap5.css' %}" rel="stylesheet">
+  </head>
+<body>
+    
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-4">
+                <ul class="nav flex-column">
+                    <li class="nav-item">
+                        <a class="nav-link" href="#" id="clientes-btn">Clientes</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#" id="ventas-btn">Ventas</a>
+                    </li>
+                </ul>
+            </div>
+            <div class="col-8">
+                <div id="div-table">
+                    {% block crud %}
+
+                    {% endblock crud %}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="{% static 'jQuery-3.7.0/jquery-3.7.0.js' %}"></script>  
+    <script src="{% static 'DataTables-1.13.6/js/jquery.dataTables.js' %}"></script>
+    <script src="{% static 'DataTables-1.13.6/js/dataTables.bootstrap5.js' %}"></script> 
+    <script>
+        $(document).ready(function()  
+ {
+            // Handle button clicks
+            $('#clientes-btn').click(function() {
+                loadTable('clientes');
+            });
+            $('#ventas-btn').click(function() {
+                loadTable('ventas');
+            });
+
+            // Load the initial table (e.g., "clientes")
+            loadTable('clientes');
+
+            function loadTable(tableName) {
+                $.ajax({
+                    url: '/' + tableName + '/tabla/',  // Apunta a la URL para cargar el contenido de la tabla
+                    type: 'GET',
+                    success: function(data) {
+                        // Insertar el HTML recibido en el contenedor div-table
+                        $('#div-table').html(data);
+                        initializeDataTable(); // Inicializa DataTables después de cargar el contenido
+                    },
+                    error: function() {
+                        console.error('Error loading table data');
+                    }
+                });
+            }
+
+            function initializeDataTable() {console.log('llega');
+                $('#table-container').DataTable({
+                    "ajax": {
+                        "url": "/clientes/",  // URL para cargar los datos en JSON
+                        "dataSrc": "data"     // DataTables busca los datos en la clave "data" del JSON
+                    },  // URL para cargar los datos en JSON
+                    "columns": [
+                        { "data": "iidcliente" },
+                        { "data": "snombrecliente" },
+                        { "data": "sapellidocliente" },
+                        { "data": "idni" }
+                    ]
+                });
+            }
+
+           
+        });
+    </script>
+
+
+</body>
+</html>
