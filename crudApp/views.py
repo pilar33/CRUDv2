@@ -55,16 +55,16 @@ def tabla_ventas(request):
 #OPCION2
 def clientes_add(request):
     if request.method== "POST":
-        formulario=ClientesForm(request.Post)
+        formulario=ClientesForm(request.POST)
         if formulario.is_valid():
             cliente=formulario.save(commit=False)
-            cliente.nombre=formulario.cleaned_data['snombrecliente']
-            cliente.nombre=formulario.cleaned_data['sapellidocliente']
-            cliente.nombre=formulario.cleaned_data['idni']
+            cliente.snombrecliente=formulario.cleaned_data['snombrecliente']
+            cliente.sapellidocliente=formulario.cleaned_data['sapellidocliente']
+            cliente.idni=formulario.cleaned_data['idni']
             cliente.save()
             return redirect('Clientes')
         else:
             formulario=ClientesForm()
 
-        return render(request,'agregarClientes.html', {'formulario': formulario})
+    return render(request,'agregarClientes.html', {'formulario': formulario})
 
