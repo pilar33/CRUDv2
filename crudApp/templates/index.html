@@ -3,157 +3,46 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CRUD</title>
+
     {% load django_bootstrap5 %}
     {% bootstrap_css %}
     {% bootstrap_javascript %}
 
     {% load static %}
-    <title>CRUD con datatables - AJAX</title>
-    <link href="{% static 'DataTables-1.13.6/css/dataTables.bootstrap5.css' %}" rel="stylesheet">
-  </head>
+
+    <link href="{% static 'DataTables/DataTables-1.13.6/css/dataTables.bootstrap5.css' %}" rel="stylesheet">
+    <link href="{% static 'DataTables/Buttons-2.4.2/css/buttons.dataTables.css' %}" rel="stylesheet">
+
+    {% block style %}
+
+
+    {% endblock style%}
+</head>
 <body>
+    <div class="container">      
+        {% bootstrap_messages %}
+        {% block content %}
+         
+         <h1 id="hd_encabezado"></h1>
     
-    <div class="container-fluid">
-        <div class="row">
-            <div class="col-4">
-                <ul class="nav flex-column">
-                    <li class="nav-item">
-                        <a class="nav-link" href="#" id="clientes-btn">Clientes</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#" id="ventas-btn">Ventas</a>
-                    </li>
-                </ul>
-            </div>
-            <div class="col-8">
-                <div id="div-table">
-                    {% block crud %}
-
-                    {% endblock crud %}
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <script src="{% static 'jQuery-3.7.0/jquery-3.7.0.js' %}"></script>  
-    <script src="{% static 'DataTables-1.13.6/js/jquery.dataTables.js' %}"></script>
-    <script src="{% static 'DataTables-1.13.6/js/dataTables.bootstrap5.js' %}"></script> 
-    <script src="{% static 'bootbox/bootbox.all.min.js' %}"></script>
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.10.5/font/bootstrap-icons.min.css" rel="stylesheet">
-    <script>
-        $(document).ready(function()  
- {
-            // Handle button clicks
-            $('#clientes-btn').click(function() {
-                loadTable('clientes');
-            });
-            $('#ventas-btn').click(function() {
-                loadTable('ventas');
-            });
-
-            // Load the initial table (e.g., "clientes")
-            loadTable('clientes');
-
-            function loadTable(tableName) {
-                $.ajax({
-                    url: '/' + tableName + '/tabla/',  // Apunta a la URL para cargar el contenido de la tabla
-                    type: 'GET',
-                    success: function(data) {
-                        // Insertar el HTML recibido en el contenedor div-table
-                        $('#div-table').html(data);
-                        initializeDataTable(tableName); // Inicializa DataTables después de cargar el contenido
-                    },
-                    error: function() {
-                        console.error('Error cargando los datos');
-                    }
-                });
-            }
-
-            function initializeDataTable(tableName) {
-           
-            switch (tableName)
-            {
-              case 'clientes':
-              $('#table-clientes').DataTable({
-                "ajax": {
-                    "url": "/clientes/",  // URL para cargar los datos en JSON
-                    "dataSrc": "data"     // DataTables busca los datos en la clave "data" del JSON
-                },  // URL para cargar los datos en JSON
-                "columns": [
-                    { "data": "iidcliente" },
-                    { "data": "snombrecliente" },
-                    { "data": "sapellidocliente" },
-                    { "data": "idni" },
-                    {
-                        data: null,
-                        render: function (data, type, row) {
-                            // Agrega un botón a cada fila y pasa el ID del registro
-                            // if (row.dfechacierre != null)
-                            // {
-                            return '<button class="btn btn-info" title="Agregar Cliente" onclick="agregarCliente_(' + row.iidcliente + ')"><i class="bi bi-person-add"></i></button>';
-                            //}
-                        }
-                    }
-                ]
-            });
-                break;
-              case 'ventas':
-              $('#table-ventas').DataTable({
-                "ajax": {
-                    "url": "/ventas/",  // URL para cargar los datos en JSON
-                    "dataSrc": "data"     // DataTables busca los datos en la clave "data" del JSON
-                },  // URL para cargar los datos en JSON
-                "columns": [
-                    { "data": "inroventa" },
-                    { "data": "dfechaventa" },
-                    { "data": "fmontoventa" }
-                ]
-            });
-                break;
-              
-            }
-
-            
-            }
-           
-        });
-
-
-        function agregarCliente(){
-            try {
-          
-            // Agregar el dominio del sitio web a la URL del iframe
-            sUrl = "http://" + location.host + "/clientes/add/";
-            console.log(sUrl);
-
-            oVentana = bootbox.dialog(
-            {
-               title: "Agregar Clientes",
-               message: "<iframe id=\"agregarClientes\" src=\"" + sUrl + "\" scrolling=\"yes\" marginwidth=\"100%\" marginheight=\"0\" frameborder=\"no\" width=\"100%\" height=\"600\"></iframe>",
-               size: 'large',
-               closeButton: false,
-               buttons: {
-                   Cancel: {
-                       label: 'Cerrar',
-                       className: 'btn-danger btn-sm bootbox-close-button',
-                       callback: function () {
-                           console.log("cerrando");
-                           location.href = "http://" + location.host + "/clientes/";
-                       }
-                   }
-               },
-
-           });
-          
-            $("#dvBootbox").attr("style", "width: 100%; height: 100%;");
-         }
-         catch (oError) {
-            bootbox.alert("<div style='text-align:left'>Ocurrió un error:<br>" + oError + "</div>");
-         }
-
-        }
-    </script>
-
-
+        {% endblock content %}
+      </div> 
+      <script src="{% static 'DataTables/jQuery-3.7.0/jquery-3.7.0.js' %}"></script>  
+      <script src="{% static 'DataTables/DataTables-1.13.6/js/jquery.dataTables.js' %}"></script>
+      <!-- <script src="{% static 'DataTables/datatables.min.js' %}"></script>   -->
+      <script src="{% static 'DataTables/DataTables-1.13.6/js/dataTables.bootstrap5.js' %}"></script>
+    
+      <!-- buttons  -->
+      <script src="{% static 'DataTables/Buttons-2.4.2/js/dataTables.buttons.min.js' %}"></script>
+    
+      <script src="{% static 'DataTables/es-ar.js' %}"></script> 
+  
+      <script src="{% static 'bootbox/bootbox.min.js' %}"></script> 
+    
 </body>
+
+{% block javascript %}
+
+{% endblock javascript %}
 </html>
