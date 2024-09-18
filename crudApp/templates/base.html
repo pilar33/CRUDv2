@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    {% load static %}
+    
+    {% load django_bootstrap5 %}
+    {% bootstrap_css %}
+    {% bootstrap_javascript %}
+
+    
+    <title>Index</title>
+    <link href="{% static 'DataTables-1.13.6/css/dataTables.bootstrap5.css' %}" rel="stylesheet">
+</head>
+<body>
+<div class="container-fluid">
+
+    {% block content %}
+
+
+    {% endblock content %}
+
+</div>
+<script src="{% static 'jQuery-3.7.0/jquery-3.7.0.js' %}"></script>  
+<script src="{% static 'DataTables-1.13.6/js/jquery.dataTables.js' %}"></script>
+<script src="{% static 'DataTables-1.13.6/js/dataTables.bootstrap5.js' %}"></script> 
+<script src="{% static 'bootbox/bootbox.all.min.js' %}"></script>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.10.5/font/bootstrap-icons.min.css" rel="stylesheet">
+{% block javascript %}
+
+{% endblock javascript %}
+</body>
+</html>
